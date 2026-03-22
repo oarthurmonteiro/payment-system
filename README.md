@@ -21,6 +21,9 @@ echo "POSTGRES_PASSWORD=$(openssl rand -hex 32)" >> .env
 echo "ACCOUNTS_DB_PASSWORD=$(openssl rand -hex 32)" >> .env
 ```
 
+## Testes
+![Tests](https://github.com/oarthurmonteiro/payment-system/actions/workflows/service-accounts.yml/badge.svg)
+
 ```
 payments-system/
 └── contracts/
