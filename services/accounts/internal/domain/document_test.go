@@ -15,22 +15,22 @@ func TestNewDocument(t *testing.T) {
 		shouldErr bool
 	}{
 		{
-			name:      "Deve aceitar um CPF válido",
+			name:      "Should accept a valid Document",
 			input:     "12345678909",
 			shouldErr: false,
 		},
 		{
-			name:      "Deve rejeitar um CPF muito curto",
+			name:      "Should reject too short Document",
 			input:     "123",
 			shouldErr: true,
 		},
 		{
-			name:      "Deve rejeitar um CPF com letras",
+			name:      "Should reject Document with letters",
 			input:     "1234567890A",
 			shouldErr: true,
 		},
 		{
-			name:      "Deve rejeitar um campo vazio",
+			name:      "Should reject empty Document",
 			input:     "",
 			shouldErr: true,
 		},

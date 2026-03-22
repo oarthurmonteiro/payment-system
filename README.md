@@ -22,7 +22,11 @@ echo "ACCOUNTS_DB_PASSWORD=$(openssl rand -hex 32)" >> .env
 ```
 
 ## Testes
-![Tests](https://github.com/oarthurmonteiro/payment-system/actions/workflows/service-accounts.yml/badge.svg)
+### Account Service
+![Go Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)
+![Build Status](https://github.com/oarthurmonteiro/payment-system/actions/workflows/service-accounts.yml/badge.svg)
+
+---
 
 ```
 payments-system/
