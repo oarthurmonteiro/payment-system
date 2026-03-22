@@ -24,7 +24,7 @@ func NewDocument(v string) (Document, error) {
 		return Document{}, ErrRequiredDocument
 	}
 
-	if err := validatedCPF(cleaned); err != nil {
+	if err := validateCPF(cleaned); err != nil {
 		return Document{}, err
 	}
 
@@ -39,7 +39,7 @@ func (d Document) Value() string {
 	return d.value
 }
 
-func validatedCPF(v string) error {
+func validateCPF(v string) error {
 	
 	if len(v) != 11 {
 		return fmt.Errorf("%w: must have 11 digits", ErrInvalidDocument)
@@ -49,7 +49,7 @@ func validatedCPF(v string) error {
 		return fmt.Errorf("%w: same digits", ErrInvalidDocument)
 	}
 
-	if !isValid(v) {
+	if !remaindersAreValid(v) {
 		return ErrInvalidDocument
 	}
 
@@ -75,7 +75,7 @@ func hasAllSameDigits(s string) bool {
 	return true
 }
 
-func isValid(cpf string) bool {
+func remaindersAreValid(cpf string) bool {
 	var sum int
 	multipliers1 := []int{10, 9, 8, 7, 6, 5, 4, 3, 2}
 	

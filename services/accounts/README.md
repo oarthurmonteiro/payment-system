@@ -32,3 +32,8 @@ protoc --proto_path=../../contracts \
     --go-grpc_out=./gen --go-grpc_opt=paths=source_relative \
     ../../contracts/accounts/v1/onboarding.proto
 ```
+
+```sh
+go test -coverprofile=cover.out ./...
+go tool cover -html=cover.out
+```

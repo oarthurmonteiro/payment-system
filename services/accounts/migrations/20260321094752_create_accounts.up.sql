@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS clients (
     full_name TEXT NOT NULL,
     document TEXT NOT NULL,
     -- email TEXT UNIQUE NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     CONSTRAINT clients_document_unique UNIQUE (document)
 );
 
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS accounts (
     id UUID PRIMARY KEY,
     client_id UUID REFERENCES clients(id) ON DELETE CASCADE,
     -- type account_type NOT NULL,
-    status account_status DEFAULT 'active',
+    status account_status DEFAULT 'ACTIVE',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

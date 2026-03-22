@@ -15,7 +15,7 @@ type PostgresRepository struct {
 }
 
 // NewPool cria um pool de conexões com configurações de performance
-func NewPool(ctx context.Context, connString string) (*pgxpool.Pool, error) {
+func NewPostgresPool(ctx context.Context, connString string) (*pgxpool.Pool, error) {
     config, err := pgxpool.ParseConfig(connString)
     if err != nil {
         return nil, err
@@ -40,13 +40,21 @@ func NewPool(ctx context.Context, connString string) (*pgxpool.Pool, error) {
     return pool, nil
 }
 
+func NewPostgresRepository(pool *pgxpool.Pool) *PostgresRepository {
+    return &PostgresRepository{
+        pool: pool,
+    }
+}
+
 func (r *PostgresRepository) handlePgError(err error) error {
     var pgErr *pgconn.PgError
     if errors.As(err, &pgErr) {
         if pgErr.Code == "23505" { // Unique Violation
             // O segredo está aqui: olhar QUAL constraint falhou
             switch pgErr.ConstraintName {
-            case "clients_document_key":
+            case "clients_pkey":
+                return domain.ErrClientAlreadyExists
+            case "clients_document_unique":
                 return domain.ErrClientAlreadyExists
             // case "accounts_number_key":
             //     return domain.ErrAccountNumberAlreadyExists // Novo erro de domínio
