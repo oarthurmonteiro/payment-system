@@ -1,0 +1,48 @@
+# --- Binários e Compilação ---
+# Ignora executáveis gerados pelo Go
+bin/
+**/dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# --- Go Específico ---
+# Ignora o binário principal do seu serviço de accounts
+services/accounts/accounts-service
+# Se você costuma rodar testes com cobertura
+*.out
+*.prof
+
+# --- IDEs e Editores ---
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# --- Docker & Infra ---
+# Ignora volumes locais de banco de dados se você os mapear no compose
+.docker/
+docker-data/
+*.log
+
+# --- Segredos e Configurações (CRÍTICO) ---
+.env
+.env.*
+!/examples/**
+
+# --- gRPC / Buf ---
+# Dependendo da sua estratégia, você pode querer ignorar os arquivos gerados
+# Se o seu CI gera o código toda vez, ignore a pasta gen.
+# Caso contrário, mantenha-os (no Go é comum versionar o gen para evitar quebras)
+# services/accounts/gen/
+
+# --- .NET (Para os futuros serviços) ---
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.sln.docuser
+.vs/

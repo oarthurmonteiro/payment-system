@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package accounts.v1;
+
+// Define onde o código gerado em Go será salvo
+option go_package = "github.com/arthurmonteiro/payment-system/accounts/v1;accountsv1";
+
+// O Serviço de Contas define as capacidades de escrita e leitura
+service AccountService {
+  // Cria um novo cliente e sua conta principal de forma atômica
+  rpc CreateAccount (CreateAccountRequest) returns (CreateAccountResponse);
+  
+  // Consulta o status e dados básicos (útil para a Public-API)
+  rpc GetAccount (GetAccountRequest) returns (GetAccountResponse);
+}
+
+// Tipos de conta suportados (Devem bater com os ENUMs do seu Postgres)
+enum AccountType {
+  ACCOUNT_TYPE_UNSPECIFIED = 0;
+  ACCOUNT_TYPE_CHECKING = 1;
+  ACCOUNT_TYPE_SAVINGS = 2;
+}
+
+message CreateAccountRequest {
+  string full_name = 1;
+  string document = 2; // CPF ou CNPJ
+  string email = 3;
+  AccountType type = 4;
+}
+
+message CreateAccountResponse {
+  string account_id = 1;
+  string client_id = 2;
+  string status = 3;
+}
+
+message GetAccountRequest {
+  string account_id = 1;
+}
+
+message GetAccountResponse {
+  string account_id = 1;
+  string client_id = 2;
+  string full_name = 3;
+  string status = 4;
+  AccountType type = 5;
+}

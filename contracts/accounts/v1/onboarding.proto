@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package accounts.v1;
+
+option go_package = "github.com/oarthurmonteiro/payment-system/services/accounts/gen/accounts/v1";
+
+service OnboardingService {
+    // O nome do método é CreateOnboarding
+    // O Request deve ser CreateOnboardingRequest
+    rpc CreateOnboarding(CreateOnboardingRequest) returns (CreateOnboardingResponse);
+}
+
+message CreateOnboardingRequest {
+    string full_name = 1;
+    string document = 2;
+}
+
+message CreateOnboardingResponse {
+    string account_id = 1;
+    string status = 2;
+}
+
+enum AccountStatus {
+    ACCOUNT_STATUS_UNSPECIFIED = 0;
+    ACCOUNT_STATUS_PENDING = 1;
+    ACCOUNT_STATUS_ACTIVE = 2;
+}

@@ -1,0 +1,60 @@
+services:
+  # Banco de Dados Central (com schemas isolados)
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Vem do .env
+      POSTGRES_DB: payment_db
+
+      # Variável customizada para o nosso script SQL usar
+      ACCOUNTS_DB_PASSWORD: ${ACCOUNTS_DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    networks:
+      - accounts-db-net
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Script inicial para criar o schema e o usuário do Accounts
+      - ./init-db:/docker-entrypoint-initdb.d 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d payment_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Accounts Service (Go)
+  accounts:
+    build:
+      context: ./services/accounts
+      dockerfile: Dockerfile
+    environment:
+      DB_URL: "postgres://user_accounts:${ACCOUNTS_DB_PASSWORD}@postgres:5432/payment_db?sslmode=disable&search_path=accounts"    
+      # PORT: 50051
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - accounts-db-net
+      - backend-net # Rede para falar com a Public API
+      # - event-bus-net # Rede para o Worker (futuro) falar com o Kafka
+    develop:
+      watch:
+        # Para mudanças de código e SQL, precisamos de REBUILD 
+        # para o 'go build' atualizar o binário e o 'embed'
+        - path: ./
+          action: rebuild
+          ignore:
+            - bin/
+            - tmp/
+
+networks:
+  accounts-db-net:
+    driver: bridge
+  backend-net:
+    driver: bridge
+  # event-bus-net:
+  #   driver: bridge
+
+volumes:
+  postgres_data:

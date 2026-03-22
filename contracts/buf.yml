@@ -1,0 +1,8 @@
+version: v1
+name: buf.build/oarthurmonteiro/payment-system # Nome lógico do módulo
+breaking:
+  use:
+    - FILE # Impede que apagues ficheiros ou campos que outros usam
+lint:
+  use:
+    - DEFAULT # Garante que segues o padrão da Google (nomes de campos, etc)
