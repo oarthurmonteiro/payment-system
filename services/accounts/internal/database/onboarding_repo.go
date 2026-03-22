@@ -21,23 +21,23 @@ func (r *PostgresRepository) CreateOnboarding(
     defer tx.Rollback(ctx)
 
     if _, err := tx.Exec(ctx, `
-        INSERT INTO accounts.clients (id, full_name, document, created_at)
+        INSERT INTO clients (id, full_name, document, created_at)
         VALUES ($1, $2, $3, $4)
-    `, c.ID, c.FullName, c.Document, c.CreatedAt); err != nil {
+    `, c.ID, c.FullName, c.Document.Value(), c.CreatedAt); err != nil {
         return r.handlePgError(err)
     }
     
     if _, err := tx.Exec(ctx, `
-        INSERT INTO accounts.accounts (id, client_id, status, created_at)
+        INSERT INTO accounts (id, client_id, status, created_at)
         VALUES ($1, $2, $3, $4)
-    `, ); err != nil {
+    `, a.ID, a.ClientID, a.Status, a.CreatedAt); err != nil {
         return r.handlePgError(err)
     }
 
     if _, err := tx.Exec(ctx, `
-        INSERT INTO accounts.outbox (id, topic, payload, status, created_at),
+        INSERT INTO outbox (id, topic, payload, status, created_at)
         VALUES ($1, $2, $3, $4, $5)
-    `, e.ID, e.EventType, e.Payload, e.Status, e.CreatedAt); err != nil { 
+    `, e.ID, e.EventType, e.Payload, e.Status.Value(), e.CreatedAt); err != nil { 
         return r.handlePgError(err) 
     }
 

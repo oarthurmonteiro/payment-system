@@ -23,7 +23,7 @@ func main() {
 	ctx := context.Background()
 
 	// 2. Iniciar Pool de Conexão para a aplicação (Usa pgxpool)
-    pool, err := database.NewPool(ctx, dbURL)
+    pool, err := database.NewPostgresPool(ctx, dbURL)
     if err != nil {
         log.Fatalf("Failed to connect to DB: %v", err)
     }

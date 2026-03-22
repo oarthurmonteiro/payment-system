@@ -1,9 +1,9 @@
 -- Remover tabelas na ordem inversa das Foreign Keys
-DROP TABLE IF EXISTS accounts.outbox;
-DROP TABLE IF EXISTS accounts.accounts;
-DROP TABLE IF EXISTS accounts.clients;
+DROP TABLE IF EXISTS outbox;
+DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS clients;
 
 -- Remover tipos (Enums)
-DROP TYPE IF EXISTS accounts.account_type;
-DROP TYPE IF EXISTS accounts.outbox_status;
-DROP TYPE IF EXISTS accounts.account_status;
+-- DROP TYPE IF EXISTS account_type;
+DROP TYPE IF EXISTS outbox_status;
+DROP TYPE IF EXISTS account_status;

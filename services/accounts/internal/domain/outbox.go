@@ -25,7 +25,7 @@ const (
 	OutboxStatusFailed OutboxStatus = "FAILED"
 )
 
-func (s OutboxStatus) String() string {
+func (s OutboxStatus) Value() string {
 	return string(s)
 }
 
