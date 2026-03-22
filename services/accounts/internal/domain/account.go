@@ -1,10 +1,13 @@
 package domain
 
 import (
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
 )
+
+var ErrRequiredClientID = errors.New("Client ID is required")
 
 type Account struct {
 	ID        uuid.UUID
@@ -27,7 +30,11 @@ func (s AccountStatus) String() string {
     return string(s)
 }
 
-func NewAccount(clientId uuid.UUID) (*Account, error) {
+func NewAccount(clientID uuid.UUID) (*Account, error) {
+	if clientID == uuid.Nil {
+        return nil, ErrRequiredClientID
+    }
+	
 	id, err := uuid.NewV7()
 	if err != nil {
 		return nil, err
@@ -35,7 +42,7 @@ func NewAccount(clientId uuid.UUID) (*Account, error) {
 
 	return &Account{
 		ID: 	  id,
-		ClientID: clientId,
+		ClientID: clientID,
 		Status:  AccountStatusPending,
 		CreatedAt: time.Now().UTC(),
 	}, nil
