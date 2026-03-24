@@ -14,14 +14,17 @@ import (
 	"github.com/oarthurmonteiro/payment-system/services/accounts/internal/usecase"
 )
 
-// OnboardingHandler injeta o UseCase para orquestrar a lógica
+type OnboardingUseCase interface {
+	Execute(ctx context.Context, input usecase.OnboardingInput) (usecase.OnboardingOutput, error)
+}
+
 type OnboardingHandler struct {
 	// O gRPC exige que você embarque essa struct para compatibilidade futura
 	pb.UnimplementedOnboardingServiceServer
-	useCase *usecase.OnboardingUseCase
+	useCase OnboardingUseCase
 }
 
-func NewOnboardingHandler(uc *usecase.OnboardingUseCase) *OnboardingHandler {
+func NewOnboardingHandler(uc OnboardingUseCase) *OnboardingHandler {
 	return &OnboardingHandler{useCase: uc}
 }
 
@@ -69,5 +72,6 @@ func (h *OnboardingHandler) mapError(err error) error {
 
     // 3. Fallback para erros inesperados (500 Internal Server Error)
     // Logamos o erro real aqui antes de esconder do cliente por segurança
+	log.Printf("Erro não mapeado no Onboarding: %v", err)
     return status.Error(codes.Internal, "internal server error")
 }

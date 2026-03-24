@@ -27,6 +27,7 @@ services/accounts/accounts-service
 .docker/
 docker-data/
 *.log
+compose.override.yml
 
 # --- Segredos e Configurações (CRÍTICO) ---
 .env

@@ -1,0 +1,15 @@
+services:
+  # Accounts Service (Go)
+  accounts:
+    build:
+      context: .
+      dockerfile: ./services/accounts/Dockerfile.dev
+    develop:
+      watch:
+        - path: ./services/accounts
+          action: sync # MUITO mais rápido que rebuild
+          target: /app
+          ignore:
+            - bin/
+            - tmp/
+    

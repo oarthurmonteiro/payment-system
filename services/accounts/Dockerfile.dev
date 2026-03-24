@@ -1,0 +1,16 @@
+# services/accounts/Dockerfile.dev
+FROM golang:1.25-alpine
+
+WORKDIR /app
+
+# Instala o Air
+# TODO: fixar uma versão para não ficar utilizando a latest
+RUN go install github.com/air-verse/air@latest
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+# O Air assume o comando para monitorar o código
+CMD ["air", "-c", ".air.toml"]

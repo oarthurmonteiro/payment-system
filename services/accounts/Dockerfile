@@ -3,9 +3,10 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o accounts-service ./cmd/main.go
+RUN go build -o main ./cmd/main.go
 
+# TODO: fixar uma versão para não ficar utilizando a latest
 FROM alpine:latest
 WORKDIR /app
-COPY --from=builder /app/accounts-service .
-CMD ["./accounts-service"]
+COPY --from=builder /app/main .
+CMD ["./main"]
