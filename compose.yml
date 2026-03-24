@@ -1,6 +1,6 @@
 services:
   # Banco de Dados Central (com schemas isolados)
-  postgres:
+  db:
     image: postgres:18-alpine
     environment:
       POSTGRES_USER: admin
@@ -29,24 +29,28 @@ services:
       context: ./services/accounts
       dockerfile: Dockerfile
     environment:
-      DB_URL: "postgres://user_accounts:${ACCOUNTS_DB_PASSWORD}@postgres:5432/payment_db?sslmode=disable&search_path=accounts"    
-      # PORT: 50051
+      DB_URL: "postgres://user_accounts:${ACCOUNTS_DB_PASSWORD}@db:5432/payment_db?sslmode=disable&search_path=accounts"    
+      PORT: 50051
+    ports:
+      - 50051:50051
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
     networks:
       - accounts-db-net
       - backend-net # Rede para falar com a Public API
       # - event-bus-net # Rede para o Worker (futuro) falar com o Kafka
-    develop:
-      watch:
-        # Para mudanças de código e SQL, precisamos de REBUILD 
-        # para o 'go build' atualizar o binário e o 'embed'
-        - path: ./
-          action: rebuild
-          ignore:
-            - bin/
-            - tmp/
+    
+  public-api:
+    build:
+      context: ./services/public-api
+      dockerfile: Dockerfile
+    depends_on:
+      - accounts
+    networks:
+      - backend-net
+    ports:
+      - 3000:3000
 
 networks:
   accounts-db-net:
